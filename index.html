@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT-Wave - 最新ITトレンドを毎朝配信</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            background: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.7;
+        }
+
+        /* ヘッダー */
+        header {
+            background: #fff;
+            border-bottom: 1px solid #e1e8ed;
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0066cc;
+            letter-spacing: -0.5px;
+        }
+
+        nav a {
+            margin-left: 1.5rem;
+            color: #5a6c7d;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #0066cc;
+        }
+
+        /* ヒーローセクション */
+        .hero {
+            background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #0066cc;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        /* モーダル */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 1.8rem;
+            color: #5a6c7d;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #0066cc;
+        }
+
+        .modal-content h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .qr-code-container {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        #qrcode img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .line-add-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #06C755;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .line-add-button:hover {
+            background: #05b34a;
+            transform: translateY(-2px);
+        }
+
+        .line-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5rem;
+        }
+
+        /* セクション共通 */
+        section {
+            padding: 4rem 1.5rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #5a6c7d;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            margin-bottom: 2.5rem;
+        }
+
+        /* 情報源セクション */
+        .sources {
+            background: white;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .source-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .source-card {
+            background: #f8f9fa;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .source-card:hover {
+            border-color: #0066cc;
+            box-shadow: 0 4px 12px rgba(0,102,204,0.1);
+        }
+
+        .source-card h3 {
+            font-size: 1.1rem;
+            color: #0066cc;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .source-card p {
+            color: #5a6c7d;
+            font-size: 0.85rem;
+        }
+
+        /* 特徴セクション */
+        .features {
+            background: #f8f9fa;
+        }
+
+        .feature-list {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .feature-item {
+            background: white;
+            border-left: 4px solid #0066cc;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .feature-item h3 {
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .feature-item p {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+        }
+
+        /* 使い方セクション */
+        .how-to {
+            background: white;
+            border-top: 1px solid #e1e8ed;
+        }
+
+        .steps {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            gap: 2rem;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: #0066cc;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .step-content p {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+        }
+
+        /* 統計セクション */
+        .stats {
+            background: #f8f9fa;
+            border-top: 1px solid #e1e8ed;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 2rem auto 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #0066cc;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #5a6c7d;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* CTAセクション */
+        .cta-section {
+            background: linear-gradient(135deg, #0066cc 0%, #004c99 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .cta-section p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button.inverted {
+            background: white;
+            color: #0066cc;
+        }
+
+        /* フッター */
+        footer {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 2.5rem 1.5rem 1.5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #bdc3c7;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: #0066cc;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid #34495e;
+            text-align: center;
+            color: #95a5a6;
+            font-size: 0.8rem;
+        }
+
+        /* レスポンシブ調整 */
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+            }
+
+            .step {
+                grid-template-columns: 60px 1fr;
+                gap: 1rem;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem 1rem;
+            }
+
+            section {
+                padding: 3rem 1rem;
+            }
+        }
+
+        /* プライバシーポリシーページ用 */
+        .policy-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .policy-content h2 {
+            color: #0066cc;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .policy-content h3 {
+            color: #2c3e50;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .policy-content p, .policy-content ul {
+            color: #5a6c7d;
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .policy-content ul {
+            padding-left: 2rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainPage">
+        <!-- ヘッダー -->
+        <header>
+            <div class="header-content">
+                <div class="logo">IT-Wave</div>
+                <nav>
+                    <a href="#sources">情報源</a>
+                    <a href="#features">特徴</a>
+                    <a href="#how-to">使い方</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- ヒーローセクション -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>最新ITトレンドを毎朝配信</h1>
+                <p>世界中のテクノロジーニュースをAIが厳選。LINEで手軽に情報収集を。</p>
+                <button class="cta-button" onclick="openModal()">
+                    無料で始める
+                </button>
+            </div>
+        </section>
+
+        <!-- 情報源セクション -->
+        <section id="sources" class="sources">
+            <h2 class="section-title">信頼できる情報源</h2>
+            <p class="section-subtitle">6つのグローバルプラットフォームから最新情報を取得</p>
+            <div class="source-grid">
+                <div class="source-card">
+                    <h3>Hacker News</h3>
+                    <p>Y Combinatorが運営する、世界中のエンジニアやスタートアップが注目するニュースプラットフォーム</p>
+                </div>
+                <div class="source-card">
+                    <h3>Reddit Technology</h3>
+                    <p>150万人以上のテクノロジー愛好家が議論する、最新トレンドとイノベーションの情報源</p>
+                </div>
+                <div class="source-card">
+                    <h3>GitHub Trending</h3>
+                    <p>最新のオープンソースプロジェクトとトレンドリポジトリを毎日更新</p>
+                </div>
+                <div class="source-card">
+                    <h3>Qiita</h3>
+                    <p>日本最大級の技術情報共有サービス。実践的な技術記事とノウハウ</p>
+                </div>
+                <div class="source-card">
+                    <h3>Dev.to</h3>
+                    <p>グローバルな開発者コミュニティ。最新の開発トレンドとベストプラクティス</p>
+                </div>
+                <div class="source-card">
+                    <h3>Show HN</h3>
+                    <p>Hacker Newsの新製品発表セクション。革新的なプロダクトをいち早くキャッチ</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特徴セクション -->
+        <section id="features" class="features">
+            <h2 class="section-title">選ばれる理由</h2>
+            <p class="section-subtitle">効率的な情報収集をサポートする3つの強み</p>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>AI による高度な要約</h3>
+                    <p>OpenAI APIが6つの情報源から膨大な情報を分析。重要度の高いニュースだけを厳選し、簡潔にまとめて配信します。</p>
+                </div>
+                <div class="feature-item">
+                    <h3>自動配信システム</h3>
+                    <p>毎朝8時に自動配信。通勤時間や朝の支度中に、その日の重要なテクノロジートレンドを把握できます。</p>
+                </div>
+                <div class="feature-item">
+                    <h3>柔軟なカスタマイズ</h3>
+                    <p>配信の停止・再開はLINEから簡単に操作可能。必要なときだけ情報を受け取ることができます。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使い方セクション -->
+        <section id="how-to" class="how-to">
+            <h2 class="section-title">始め方</h2>
+            <p class="section-subtitle">3ステップで簡単に利用開始</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>友だち追加</h3>
+                        <p>LINE公式アカウントを友だち追加。登録は30秒で完了します。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>自動配信開始</h3>
+                        <p>翌朝8時から自動で配信がスタート。特別な設定は不要です。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>コマンドで管理</h3>
+                        <p>「今すぐ」「停止」「再開」などのコマンドで、配信を自由にコントロール。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTAセクション -->
+        <section class="cta-section">
+            <h2>今すぐ始めましょう</h2>
+            <p>無料で最新ITトレンドを受け取る</p>
+            <button class="cta-button inverted" onclick="openModal()">
+                LINE友だち追加
+            </button>
+        </section>
+
+        <!-- フッター -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>サービス</h4>
+                    <a href="#sources">情報源</a>
+                    <a href="#features">特徴</a>
+                    <a href="#how-to">使い方</a>
+                </div>
+                <div class="footer-section">
+                    <h4>リソース</h4>
+                    <a onclick="showPrivacyPolicy()">プライバシーポリシー</a>
+                    <a onclick="showTerms()">利用規約</a>
+                    <a onclick="showFAQ()">FAQ</a>
+                </div>
+                <div class="footer-section">
+                    <h4>お問い合わせ</h4>
+                    <a href="xinanteng065@gmail.com">サポート</a>
+                    <a href="https://github.com" target="_blank">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 IT-Wave. All rights reserved.</p>
+                <p style="margin-top: 0.5rem;">Powered by OpenAI API × LINE Messaging API</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- プライバシーポリシーページ -->
+    <div id="privacyPage" class="hidden">
+        <header>
+            <div class="header-content">
+                <div class="logo">IT-Wave</div>
+            </div>
+        </header>
+        <section style="padding: 4rem 1.5rem; background: #f8f9fa;">
+            <div class="policy-content">
+                <a class="back-button" onclick="showMainPage()">← トップに戻る</a>
+                <h1 style="font-size: 2rem; color: #2c3e50; margin-bottom: 2rem;">プライバシーポリシー</h1>
+                
+                <p>IT-Wave（以下「当サービス」）は、ユーザーの個人情報の取り扱いについて、以下のとおりプライバシーポリシーを定めます。</p>
+
+                <h2>1. 収集する情報</h2>
+                <p>当サービスは、以下の情報を収集します：</p>
+                <ul>
+                    <li>LINE ユーザーID</li>
+                    <li>表示名（ニックネーム）</li>
+                    <li>サービス利用履歴（配信設定、コマンド使用履歴）</li>
+                </ul>
+
+                <h2>2. 情報の利用目的</h2>
+                <p>収集した情報は、以下の目的で利用します：</p>
+                <ul>
+                    <li>ITトレンド情報の配信</li>
+                    <li>サービスの改善と最適化</li>
+                    <li>ユーザーサポート</li>
+                    <li>統計データの作成（個人を特定しない形式）</li>
+                </ul>
+
+                <h2>3. 情報の第三者提供</h2>
+                <p>当サービスは、以下の場合を除き、ユーザーの個人情報を第三者に提供することはありません：</p>
+                <ul>
+                    <li>ユーザーの同意がある場合</li>
+                    <li>法令に基づく場合</li>
+                    <li>人の生命、身体または財産の保護のために必要がある場合</li>
+                </ul>
+
+                <h2>4. 外部サービスの利用</h2>
+                <p>当サービスは、以下の外部サービスを利用しています：</p>
+                <ul>
+                    <li>LINE Messaging API（メッセージ配信）</li>
+                    <li>OpenAI API（コンテンツ要約）</li>
+                    <li>各種情報源API（Hacker News, Reddit, GitHub, Qiita, Dev.to等）</li>
+                </ul>
+
+                <h2>5. 情報の保管と削除</h2>
+                <p>ユーザー情報は、サービス提供に必要な期間保管されます。ブロックまたは配信停止後、一定期間経過後に削除されます。</p>
+
+                <h2>6. セキュリティ</h2>
+                <p>当サービスは、個人情報の漏洩、滅失、毀損を防止するため、適切なセキュリティ対策を実施しています。</p>
+
+                <h2>7. プライバシーポリシーの変更</h2>
+                <p>当サービスは、必要に応じて本ポリシーを変更することがあります。変更後のポリシーは、本ページに掲載された時点で効力を生じます。</p>
+
+                <h2>8. お問い合わせ</h2>
+                <p>本ポリシーに関するお問い合わせは、以下までご連絡ください：</p>
+                <p><a href="xinanteng065@gmail.com" style="color: #0066cc;">xinanteng065@gmail.com</a></p>
+
+                <p style="margin-top: 3rem; font-size: 0.9rem; color: #95a5a6;">最終更新日: 2025年10月21日</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- 利用規約ページ -->
+    <div id="termsPage" class="hidden">
+        <header>
+            <div class="header-content">
+                <div class="logo">IT-Wave</div>
+            </div>
+        </header>
+        <section style="padding: 4rem 1.5rem; background: #f8f9fa;">
+            <div class="policy-content">
+                <a class="back-button" onclick="showMainPage()">← トップに戻る</a>
+                <h1 style="font-size: 2rem; color: #2c3e50; margin-bottom: 2rem;">利用規約</h1>
+                
+                <h2>第1条（適用）</h2>
+                <p>本規約は、当サービスの利用に関する条件を定めるものです。ユーザーは、本規約に同意した上で当サービスを利用するものとします。</p>
+
+                <h2>第2条（サービス内容）</h2>
+                <p>当サービスは、LINEを通じて最新のITトレンド情報を配信するサービスです。</p>
+
+                <h2>第3条（利用料金）</h2>
+                <p>当サービスは無料でご利用いただけます。ただし、通信料金はユーザーの負担となります。</p>
+
+                <h2>第4条（禁止事項）</h2>
+                <p>ユーザーは、以下の行為を行ってはなりません：</p>
+                <ul>
+                    <li>法令または公序良俗に違反する行為</li>
+                    <li>当サービスの運営を妨害する行為</li>
+                    <li>他のユーザーまたは第三者の権利を侵害する行為</li>
+                    <li>配信された情報の無断転載や商用利用</li>
+                </ul>
+
+                <h2>第5条（サービスの変更・停止）</h2>
+                <p>当サービスは、事前の予告なくサービス内容の変更または提供の停止を行うことができます。</p>
+
+                <h2>第6条（免責事項）</h2>
+                <p>当サービスは、配信される情報の正確性、完全性、有用性について保証しません。情報の利用はユーザーの責任において行ってください。</p>
+
+                <h2>第7条（規約の変更）</h2>
+                <p>当サービスは、必要に応じて本規約を変更することがあります。変更後の規約は、本ページに掲載された時点で効力を生じます。</p>
+
+                <h2>第8条（準拠法・管轄裁判所）</h2>
+                <p>本規約は日本法に準拠し、本規約に関する紛争については、東京地方裁判所を第一審の専属的合意管轄裁判所とします。</p>
+
+                <p style="margin-top: 3rem; font-size: 0.9rem; color: #95a5a6;">最終更新日: 2025年1月1日</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- FAQページ -->
+    <div id="faqPage" class="hidden">
+        <header>
+            <div class="header-content">
+                <div class="logo">IT-Wave</div>
+            </div>
+        </header>
+        <section style="padding: 4rem 1.5rem; background: #f8f9fa;">
+            <div class="policy-content">
+                <a class="back-button" onclick="showMainPage()">← トップに戻る</a>
+                <h1 style="font-size: 2rem; color: #2c3e50; margin-bottom: 2rem;">よくある質問（FAQ）</h1>
+                
+                <h2>Q1. 利用料金はかかりますか？</h2>
+                <p>完全無料でご利用いただけます。ただし、LINEの通信料金はご自身の負担となります。</p>
+
+                <h2>Q2. 配信時刻は変更できますか？</h2>
+                <p>現在、配信時刻は毎朝8時に固定されています。今後のアップデートで時刻変更機能を追加予定です。</p>
+
+                <h2>Q3. 配信を一時停止したい</h2>
+                <p>LINEで「停止」と送信すると、配信が停止されます。再開する場合は「再開」と送信してください。</p>
+
+                <h2>Q4. すぐに情報を受け取りたい</h2>
+                <p>LINEで「今すぐ」と送信すると、その場で最新のトレンド情報が配信されます。</p>
+
+                <h2>Q5. どのような情報源を使っていますか？</h2>
+                <p>Hacker News、Reddit Technology、GitHub Trending、Qiita、Dev.to、Show HNの6つのプラットフォームから情報を取得しています。</p>
+
+                <h2>Q6. 情報の正確性について</h2>
+                <p>各情報源から取得した情報をOpenAI APIで要約していますが、内容の正確性を保証するものではありません。重要な情報は元のソースで確認することをお勧めします。</p>
+
+                <h2>Q7. 退会したい</h2>
+                <p>LINEでブロックするか、「停止」と送信することで配信が停止されます。完全にデータを削除したい場合は、サポートまでご連絡ください。</p>
+
+                <h2>Q8. エラーが発生した場合</h2>
+                <p>配信エラーや不具合が発生した場合は、以下のメールアドレスまでお問い合わせください：<br>
+                <a href="xinanteng@065@gmail.com" style="color: #0066cc;">xinanteng@065@gmail.com</a></p>
+
+                <h2>Q9. 対応言語は？</h2>
+                <p>現在は日本語のみ対応しています。英語版は今後リリース予定です。</p>
+
+                <h2>Q10. 企業での利用は可能ですか？</h2>
+                <p>はい、個人・法人問わずご利用いただけます。チーム全体での利用をご検討の場合は、お気軽にお問い合わせください。</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- QRコードモーダル -->
+    <div id="lineModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>LINE友だち追加</h3>
+            <p style="color: #5a6c7d; margin-bottom: 1rem; font-size: 0.9rem;">
+                QRコードを読み取るか、下のボタンから追加してください
+            </p>
+            <div class="qr-code-container">
+                <div id="qrcode"></div>
+                <p style="font-size: 0.85rem; color: #5a6c7d;">
+                    スマートフォンのカメラで読み取り
+                </p>
+            </div>
+            <a href="https://line.me/R/ti/p/@298qcfgk" id="lineAddLink" class="line-add-button" target="_blank">
+                <svg class="line-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"></path>
+                </svg>
+                LINEで友だち追加
+            </a>
+        </div>
+    </div>
+
+    <!-- QRコード生成ライブラリ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        // ========================================
+        // 設定: LINE Bot ID
+        // ========================================
+        const LINE_BOT_ID = '@298qcfgk';
+        const LINE_ADD_URL = `https://line.me/R/ti/p/${LINE_BOT_ID}`;
+
+        // QRコード生成済みフラグ
+        let qrGenerated = false;
+
+        // ページ切り替え
+        function showMainPage() {
+            document.getElementById('mainPage').classList.remove('hidden');
+            document.getElementById('privacyPage').classList.add('hidden');
+            document.getElementById('termsPage').classList.add('hidden');
+            document.getElementById('faqPage').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showPrivacyPolicy() {
+            document.getElementById('mainPage').classList.add('hidden');
+            document.getElementById('privacyPage').classList.remove('hidden');
+            document.getElementById('termsPage').classList.add('hidden');
+            document.getElementById('faqPage').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showTerms() {
+            document.getElementById('mainPage').classList.add('hidden');
+            document.getElementById('privacyPage').classList.add('hidden');
+            document.getElementById('termsPage').classList.remove('hidden');
+            document.getElementById('faqPage').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showFAQ() {
+            document.getElementById('mainPage').classList.add('hidden');
+            document.getElementById('privacyPage').classList.add('hidden');
+            document.getElementById('termsPage').classList.add('hidden');
+            document.getElementById('faqPage').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // モーダル操作
+        function openModal() {
+            const modal = document.getElementById('lineModal');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // QRコードを生成（初回のみ）
+            if (!qrGenerated) {
+                const qrcodeDiv = document.getElementById('qrcode');
+                qrcodeDiv.innerHTML = ''; // クリア
+                
+                try {
+                    new QRCode(qrcodeDiv, {
+                        text: LINE_ADD_URL,
+                        width: 200,
+                        height: 200,
+                        colorDark: '#000000',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                    qrGenerated = true;
+                    console.log('QRコード生成成功:', LINE_ADD_URL);
+                } catch (error) {
+                    console.error('QRコード生成エラー:', error);
+                    qrcodeDiv.innerHTML = '<p style="color: #e74c3c;">QRコード生成に失敗しました</p>';
+                }
+            }
+            
+            // LINE追加リンクを設定
+            document.getElementById('lineAddLink').href = LINE_ADD_URL;
+            console.log('モーダル表示、リンク:', LINE_ADD_URL);
+        }
+
+        function closeModal() {
+            document.getElementById('lineModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // モーダル外クリックで閉じる
+        window.onclick = function(event) {
+            const modal = document.getElementById('lineModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // ESCキーで閉じる
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // ページ読み込み時に統計取得
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('ページ読み込み完了');
+            console.log('LINE Bot ID:', LINE_BOT_ID);
+            console.log('LINE追加URL:', LINE_ADD_URL);
+            
+            // 統計情報を取得
+            loadStats();
+            
+            // 30秒ごとに更新
+            setInterval(loadStats, 30000);
+        });
+
+        // スムーススクロール
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href !== '#') {
+                        e.preventDefault();
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
